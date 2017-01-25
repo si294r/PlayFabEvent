@@ -75,5 +75,5 @@ foreach ($output as $item) {
             exec("rm /var/www/html/PlayFabEvent/playfab*");
         }
     }
-    break;
+//    break;
 }
