@@ -70,6 +70,7 @@ foreach ($output as $item) {
             file_put_contents($file_sql, $sql);
             exec("psql --host=$rhost --port=$rport --username=$ruser --no-password --echo-all $rdatabase < " . $file_sql, $output_file_sql);
             echo implode("\n", $output_file_sql) . "\n\n";
+            
             exec("rm /var/www/html/PlayFabEvent/*.sql");
             exec("rm /var/www/html/PlayFabEvent/playfab*");
         }
