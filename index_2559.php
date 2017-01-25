@@ -18,7 +18,7 @@ foreach ($output as $item) {
         exec("aws s3 ls $s3_url_date", $output_date);
 
         if (count($output_date) > 0) {
-            echo "Copying: aws s3 cp $s3_url_date ./ --recursive\n";
+            echo "Copying: aws s3 cp $s3_url_date /var/www/html/PlayFabEvent/ --recursive\n";
             exec("aws s3 cp $s3_url_date ./ --recursive");
             echo count($output_date) . "\n";
             $file_sql = "";
@@ -69,6 +69,8 @@ foreach ($output as $item) {
             file_put_contents($file_sql, $sql);
             exec("psql --host=$rhost --port=$rport --username=$ruser --no-password --echo-all $rdatabase < " . $file_sql, $output_file_sql);
             echo implode("\n", $output_file_sql) . "\n\n";
+            exec("rm /var/www/html/PlayFabEvent/*.sql");
+            exec("rm /var/www/html/PlayFabEvent/playfab*");
         }
     }
     break;
