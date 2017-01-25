@@ -19,7 +19,7 @@ foreach ($output as $item) {
 
         if (count($output_date) > 0) {
             echo "Copying: aws s3 cp $s3_url_date /var/www/html/PlayFabEvent/ --recursive\n";
-            exec("aws s3 cp $s3_url_date ./ --recursive");
+            exec("aws s3 cp $s3_url_date /var/www/html/PlayFabEvent/ --recursive");
             echo count($output_date) . "\n";
             $file_sql = "";
             $create = "";
@@ -29,8 +29,8 @@ foreach ($output as $item) {
                     $item_date = substr($item_date, strpos($item_date, "playfab"));
                     echo $item_date . "\n";
 
-                    exec("gunzip -f " . basename($item_date));
-                    $str_json = "[" . file_get_contents(basename($item_date, ".gz")) . "]";
+                    exec("gunzip -f /var/www/html/PlayFabEvent/" . basename($item_date));
+                    $str_json = "[" . file_get_contents("/var/www/html/PlayFabEvent/" . basename($item_date, ".gz")) . "]";
                     $str_json = str_replace("{", ",{", $str_json);
                     $str_json = str_replace("[,{", "[{", $str_json);
                     $arr_json = json_decode($str_json);
@@ -66,6 +66,7 @@ foreach ($output as $item) {
             }
             $sql = $create . "\n" . $sql;
 //            echo $sql;
+            $file_sql = "/var/www/html/PlayFabEvent/" . $file_sql;
             file_put_contents($file_sql, $sql);
             exec("psql --host=$rhost --port=$rport --username=$ruser --no-password --echo-all $rdatabase < " . $file_sql, $output_file_sql);
             echo implode("\n", $output_file_sql) . "\n\n";
